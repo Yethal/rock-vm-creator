@@ -1,7 +1,7 @@
 #!/bin/sh
 set +e
 
-FILE=roonbox-linuxx64-nuc3-usb-factoryreset.img
+FILE=roonbox-linuxx64-nuc4-usb-factoryreset.img
 VM=ROCK
 MEM=4096
 CPUS=4
@@ -21,7 +21,7 @@ if [ ! -f install.vdi ]; then
       echo "Downloading the installer from Roon server"
       wget -q https://download.roonlabs.com/builds/$FILE.gz
     fi
-    gunzip $FILE.gz 
+    gunzip $FILE.gz
   fi
   vboxmanage convertfromraw $FILE install.vdi --format VDI >/dev/null 2>&1
 fi
@@ -61,7 +61,7 @@ vboxmanage modifyvm "$VM" \
   --memory "$MEM" \
   --cpus "$CPUS" \
   --graphicscontroller vboxvga \
-  --firmware bios \
+  --firmware efi64 \
   --usbxhci on \
   --keyboard usb \
   --nic1 nat
@@ -78,7 +78,7 @@ vboxmanage controlvm "$VM" keyboardputscancode 1c 9c
 sleep 2
 vboxmanage controlvm "$VM" keyboardputscancode 15 95
 vboxmanage controlvm "$VM" keyboardputscancode 1c 9c
-sleep 30
+sleep 45
 #detach installer from vm
 vboxmanage storageattach "$VM" \
   --storagectl "SATA" \
